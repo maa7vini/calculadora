@@ -26,6 +26,15 @@ class Calculator {
 
     // process all calculator operations 
     processOperation(operation) {
+        // check if currrent is empty
+        if(this.currentOperationText.innerText === '' && operation !== 'C') { 
+            // change operation
+            if(this.previousOperationText.innerText !== '') {
+                this.changeOperation(operation);
+            }
+            return;
+        }
+
         
         // get current and previous value
         let operationValue
@@ -52,6 +61,22 @@ class Calculator {
                case '*': 
                 operationValue = previous * current
                 this.updateScreen(operationValue, operation, current, previous)
+               break
+               
+               case 'DEL': 
+                this.processDelOperator()
+               break
+
+               case 'CE': 
+                this.processClearCurrentOperation()
+               break
+
+               case 'C': 
+                this.processClearOperation()
+               break
+
+               case '=': 
+                this.processEqualsOperator()
                break
             default:
                 return;
@@ -82,6 +107,47 @@ class Calculator {
             this.previousOperationText.innerText = `${operationValue} ${operation}`;
             this.currentOperationText.innerText = '';
         }
+    }
+
+
+    // change math operation
+    changeOperation(operation) {
+
+
+        const mathOperations = ['*', '/', '+', '-'] 
+
+
+        if(!mathOperations.includes(operation)) {
+            return
+        }
+
+        this.previousOperationText.innerText = this.previousOperationText.innerText.slice(0, -1) + operation
+
+    }
+    
+    // Delete the last digit
+    processDelOperator() {
+        this.currentOperationText.innerText = this.currentOperationText.innerText.slice(0, -1)
+    }
+
+    // clear the current operation
+    processClearCurrentOperation() {
+        this.currentOperationText.innerText = '';
+    }
+    
+    // clear all operations
+    processClearOperation() {
+        this.currentOperationText.innerText = ''
+        this.previousOperationText.innerText = ''
+    }
+    
+    // process an operation
+    processEqualsOperator() {
+
+        const operation = previousOperationText.innerText.split(' ')[1]
+
+        this.processOperation(operation);
+
     }
 
 }
